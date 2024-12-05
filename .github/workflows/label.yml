@@ -7,6 +7,8 @@ on:
 jobs:
   add-label:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Check issue title
         id: check_title
@@ -16,10 +18,10 @@ jobs:
           else
             echo "##[set-output name=add_label;]false"
           fi
-
-      - name: Add label to new issue
+      - run: gh issue edit "$NUMBER" --add-label "$LABELS"
         if: steps.check_title.outputs.add_label == 'true'
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'Recipe'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          LABELS: recipe
