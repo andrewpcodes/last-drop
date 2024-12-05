@@ -1,0 +1,25 @@
+name: Label new issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check issue title
+        id: check_title
+        run: |
+          if [[ "${{ github.event.issue.title }}" == Recipe:* ]]; then
+            echo "##[set-output name=add_label;]true"
+          else
+            echo "##[set-output name=add_label;]false"
+          fi
+
+      - name: Add label to new issue
+        if: steps.check_title.outputs.add_label == 'true'
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: 'Recipe'
