@@ -4,7 +4,7 @@ interface IRecipe {
   _id: string;
   name: string;
   ingredients: IIngredient[];
-  instructions: string[];
+  instructions: IInstruction[];
   categories: string[];
 }
 
@@ -14,11 +14,16 @@ interface IIngredient {
   unit: string;
 }
 
+interface IInstruction {
+  number: number;
+  instruction: string;
+}
+
 const recipeSchema = new Schema<IRecipe>({
   _id: { type: String, required: true },
   name: { type: String, required: true },
   ingredients: { type: [Object], required: true },
-  instructions: { type: [String], required: true },
+  instructions: { type: [Object], required: true },
   categories: { type: [String], required: true },
 });
 
