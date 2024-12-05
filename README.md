@@ -1,5 +1,7 @@
 # last-drop
 
+The drinks api. Good to the last drop.
+
 ## Contributing
 
 ### Recieps
