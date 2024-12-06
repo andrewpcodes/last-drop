@@ -23,7 +23,7 @@ router.get('/recipe/:id', async (req: Request, res: Response) => {
     }
     res.status(200).send(recipe);
   } catch (error) {
-    res.status(500);
+    res.status(500).send(error);
   }
 });
 
