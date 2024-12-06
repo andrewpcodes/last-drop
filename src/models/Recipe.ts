@@ -6,6 +6,7 @@ interface IRecipe {
   ingredients: IIngredient[];
   instructions: IInstruction[];
   categories: string[];
+  imageUris: string[];
 }
 
 interface IIngredient {
@@ -25,6 +26,7 @@ const recipeSchema = new Schema<IRecipe>({
   ingredients: { type: [Object], required: true },
   instructions: { type: [Object], required: true },
   categories: { type: [String], required: true },
+  imageUris: { type: [String], required: true }
 });
 
 const Recipe = model<IRecipe>('reciepes', recipeSchema);
