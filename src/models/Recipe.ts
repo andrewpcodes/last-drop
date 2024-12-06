@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
+import { ObjectId, Schema, model } from 'mongoose';
 
 interface IRecipe {
-  _id: string;
+  _id: ObjectId;
   name: string;
   ingredients: IIngredient[];
   instructions: IInstruction[];
@@ -20,7 +20,7 @@ interface IInstruction {
 }
 
 const recipeSchema = new Schema<IRecipe>({
-  _id: { type: String, required: true },
+  _id: { type: Schema.ObjectId, required: true },
   name: { type: String, required: true },
   ingredients: { type: [Object], required: true },
   instructions: { type: [Object], required: true },
