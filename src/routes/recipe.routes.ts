@@ -20,6 +20,7 @@ router.get('/recipe/:id', async (req: Request, res: Response) => {
     const recipe = await Recipe.findById(id);
     if (!recipe) {
       res.status(404).send('Recipe not found');
+      return;
     }
     res.status(200).send(recipe);
   } catch (error) {
