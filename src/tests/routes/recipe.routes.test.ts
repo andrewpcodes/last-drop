@@ -1,6 +1,5 @@
 import request from 'supertest';
 import express from 'express';
-import mongoose from 'mongoose';
 import router from '../../routes/recipe.routes';
 import Recipe from '../../models/Recipe';
 
