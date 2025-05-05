@@ -2,7 +2,8 @@ import { ObjectId, Schema, model } from 'mongoose';
 
 interface IRecipe {
   _id: ObjectId;
-  name: string;
+  title: string;
+  description: string;
   ingredients: IIngredient[];
   instructions: IInstruction[];
   categories: string[];
@@ -10,7 +11,7 @@ interface IRecipe {
 }
 
 interface IIngredient {
-  ingreident: string;
+  ingredient: string;
   quantity: string;
   unit: string;
 }
@@ -21,14 +22,14 @@ interface IInstruction {
 }
 
 const recipeSchema = new Schema<IRecipe>({
-  _id: { type: Schema.ObjectId, required: true },
-  name: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
   ingredients: { type: [Object], required: true },
   instructions: { type: [Object], required: true },
   categories: { type: [String], required: true },
   imageUris: { type: [String], required: true }
 });
 
-const Recipe = model<IRecipe>('reciepes', recipeSchema);
+const RecipeModel = model<IRecipe>('recipes', recipeSchema);
 
-export default Recipe;
+export default RecipeModel;
