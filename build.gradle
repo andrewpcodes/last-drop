@@ -50,11 +50,23 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 
     implementation 'org.postgresql:postgresql'
+
+    // Remove the problematic mockito-inline dependency and replace with proper mockito-core
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
 }
 
 test {
     useJUnitPlatform()
     testLogging {
         events "PASSED", "SKIPPED", "FAILED"
+    }
+
+    // Configure Mockito as a Java agent to resolve the warning
+    doFirst {
+        def mockitoAgent = configurations.testRuntimeClasspath.find { it.name.contains('mockito-core') }
+        if (mockitoAgent) {
+            jvmArgs "-javaagent:${mockitoAgent.absolutePath}"
+        }
     }
 }
