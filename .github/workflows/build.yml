@@ -1,0 +1,35 @@
+name: Build, Test & Dockerize
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-test-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '24'
+
+      - name: Build & Test with Gradle
+        run: ./gradlew clean build
+
+      - name: Build Docker image
+        run: docker build -t last-drop:${{ github.sha }} .
+
+      - name: Save Docker image as artifact
+        run: docker save last-drop:${{ github.sha }} -o last-drop-image.tar
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: last-drop-image
+          path: last-drop-image.tar
