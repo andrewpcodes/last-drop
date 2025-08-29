@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: last-drop-v2
+
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5432/last_drop
+    username: localdbuser
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: Ov23li0nREeWMVJ2ET5U
+            clientSecret: a91dd2a92f8ed3fdc0fc0f6a3517882d372633a1

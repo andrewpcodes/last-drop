@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/last_drop
+    username: <fill-in-your-username>
+    password: <fill-in-your-password>
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
