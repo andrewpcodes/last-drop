@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.overmild'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
     toolchain {
@@ -66,7 +66,7 @@ test {
     doFirst {
         def mockitoAgent = configurations.testRuntimeClasspath.find { it.name.contains('mockito-core') }
         if (mockitoAgent) {
-            jvmArgs "-javaagent:${mockitoAgent.absolutePath}"
+            jvmArgs "-javaagent:${mockitoAgent}"
         }
     }
 }
