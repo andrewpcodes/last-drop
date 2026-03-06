@@ -16,8 +16,6 @@ spring:
 
   security:
     oauth2:
-      client:
-        registration:
-          github:
-            clientId: Ov23li0nREeWMVJ2ET5U
-            clientSecret: a91dd2a92f8ed3fdc0fc0f6a3517882d372633a1
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://dev-xlbubx8zg3c4dpjs.us.auth0.com/.well-known/jwks.json
