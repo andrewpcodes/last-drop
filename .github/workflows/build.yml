@@ -5,9 +5,27 @@ on:
     branches: [ main ]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  build-test-docker:
+  build-test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: last_drop
+          POSTGRES_USER: localdbuser
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U localdbuser -d last_drop"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -21,6 +39,24 @@ jobs:
 
       - name: Build & Test with Gradle
         run: ./gradlew clean build
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/last_drop
+          SPRING_DATASOURCE_USERNAME: localdbuser
+          SPRING_DATASOURCE_PASSWORD: password
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build-test
+    permissions:
+      contents: read
+      actions: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose config
+        run: docker compose config
 
       - name: Build Docker image
         run: docker build -t last-drop:${{ github.sha }} .
@@ -33,3 +69,25 @@ jobs:
         with:
           name: last-drop-image
           path: last-drop-image.tar
+
+  compose-smoke-test:
+    runs-on: ubuntu-latest
+    needs: build-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start full stack with Docker Compose
+        run: docker compose up --build --wait --wait-timeout 120
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB || 'last_drop' }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER || 'localdbuser' }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'password' }}
+
+      - name: Verify stack is running
+        run: docker compose ps
+
+      - name: Tear down
+        if: always()
+        run: docker compose down --volumes
