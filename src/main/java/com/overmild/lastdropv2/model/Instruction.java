@@ -5,12 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "instructions")
+@EqualsAndHashCode(exclude = "drink")
+@ToString(exclude = "drink")
 public class Instruction {
 
     @Id
