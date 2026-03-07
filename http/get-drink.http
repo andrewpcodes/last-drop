@@ -1,0 +1,5 @@
+### Get a single drink by ID
+# Requires scope: read.drinks
+GET {{base_url}}/drink?id=<replace-with-drink-uuid>
+Authorization: Bearer {{auth_token}}
+Accept: application/json

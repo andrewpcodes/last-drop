@@ -1,0 +1,14 @@
+### Create a new drink
+# Requires scope: create.drinks
+POST {{base_url}}/drink
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Mojito",
+  "description": "A refreshing Cuban cocktail",
+  "ingredients": [],
+  "instructions": [],
+  "imageUris": []
+}

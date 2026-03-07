@@ -1,0 +1,15 @@
+### Update an existing drink
+# Requires scope: update.drinks
+PUT {{base_url}}/drink
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "<replace-with-drink-uuid>",
+  "name": "Mojito (Updated)",
+  "description": "An even more refreshing Cuban cocktail",
+  "ingredients": [],
+  "instructions": [],
+  "imageUris": []
+}

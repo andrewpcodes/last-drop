@@ -1,0 +1,13 @@
+### List all drinks
+# Requires scope: read.drinks
+GET {{base_url}}/drinks
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+### Search drinks by name
+# Requires scope: read.drinks
+GET {{base_url}}/drinks?name=mojito
+Authorization: Bearer {{auth_token}}
+Accept: application/json
