@@ -14,7 +14,8 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String image_uri;
+    @Column(name = "image_uri")
+    private String imageUri;
 
     private String description;
 }

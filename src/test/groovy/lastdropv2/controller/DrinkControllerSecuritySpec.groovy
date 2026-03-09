@@ -107,20 +107,20 @@ class DrinkControllerSecuritySpec extends Specification {
         result.andExpect(status().isOk())
     }
 
-    def "unauthenticated DELETE /drink/delete request returns 401"() {
+    def "unauthenticated DELETE /drink request returns 401"() {
         when:
         def result = mockMvc.perform(
-                delete("/drink/delete").param("id", UUID.randomUUID().toString())
+                delete("/drink").param("id", UUID.randomUUID().toString())
         )
 
         then:
         result.andExpect(status().isUnauthorized())
     }
 
-    def "DELETE /drink/delete with wrong scope returns 403"() {
+    def "DELETE /drink with wrong scope returns 403"() {
         when:
         def result = mockMvc.perform(
-                delete("/drink/delete")
+                delete("/drink")
                         .param("id", UUID.randomUUID().toString())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_read.drinks")))
         )
@@ -129,15 +129,94 @@ class DrinkControllerSecuritySpec extends Specification {
         result.andExpect(status().isForbidden())
     }
 
-    def "DELETE /drink/delete with correct scope returns 200"() {
+    def "DELETE /drink with correct scope returns 204"() {
         given:
         def drinkId = UUID.randomUUID()
 
         when:
         def result = mockMvc.perform(
-                delete("/drink/delete")
+                delete("/drink")
                         .param("id", drinkId.toString())
                         .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_delete.drinks")))
+        )
+
+        then:
+        result.andExpect(status().isNoContent())
+    }
+
+    def "unauthenticated PUT /drink request returns 401"() {
+        when:
+        def result = mockMvc.perform(
+                put("/drink")
+                        .contentType("application/json")
+                        .content('{"id":"' + UUID.randomUUID() + '","name":"Updated"}')
+        )
+
+        then:
+        result.andExpect(status().isUnauthorized())
+    }
+
+    def "PUT /drink with wrong scope returns 403"() {
+        when:
+        def result = mockMvc.perform(
+                put("/drink")
+                        .contentType("application/json")
+                        .content('{"id":"' + UUID.randomUUID() + '","name":"Updated"}')
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_read.drinks")))
+        )
+
+        then:
+        result.andExpect(status().isForbidden())
+    }
+
+    def "PUT /drink with correct scope returns 200"() {
+        given:
+        def drinkId = UUID.randomUUID()
+        drinkService.updateDrink(_) >> Drink.builder().name("Updated").build()
+
+        when:
+        def result = mockMvc.perform(
+                put("/drink")
+                        .contentType("application/json")
+                        .content('{"id":"' + drinkId + '","name":"Updated"}')
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_update.drinks")))
+        )
+
+        then:
+        result.andExpect(status().isOk())
+    }
+
+    def "unauthenticated GET /drinks request returns 401"() {
+        when:
+        def result = mockMvc.perform(get("/drinks"))
+
+        then:
+        result.andExpect(status().isUnauthorized())
+    }
+
+    def "GET /drinks with correct scope returns 200"() {
+        given:
+        drinkService.searchDrinks(null) >> []
+
+        when:
+        def result = mockMvc.perform(
+                get("/drinks")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_read.drinks")))
+        )
+
+        then:
+        result.andExpect(status().isOk())
+    }
+
+    def "GET /drinks with name param and correct scope returns 200"() {
+        given:
+        drinkService.searchDrinks("mojito") >> [Drink.builder().name("Mojito").build()]
+
+        when:
+        def result = mockMvc.perform(
+                get("/drinks")
+                        .param("name", "mojito")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_read.drinks")))
         )
 
         then:

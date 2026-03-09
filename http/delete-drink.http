@@ -1,0 +1,4 @@
+### Delete a drink by ID
+# Requires scope: delete.drinks
+DELETE {{base_url}}/drink?id=<replace-with-drink-uuid>
+Authorization: Bearer {{auth_token}}

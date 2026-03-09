@@ -10,12 +10,16 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "ingredients")
+@EqualsAndHashCode(exclude = "drink")
+@ToString(exclude = "drink")
 public class Ingredient {
 
     @Id

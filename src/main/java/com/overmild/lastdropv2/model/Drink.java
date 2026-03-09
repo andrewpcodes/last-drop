@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Table(name = "drinks")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"imageUris", "ingredients", "instructions"})
+@ToString(exclude = {"imageUris", "ingredients", "instructions"})
 public class Drink {
 
     @Id
